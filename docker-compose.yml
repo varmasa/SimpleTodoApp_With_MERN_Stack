@@ -2,7 +2,7 @@
 version: "3.8"
 services:
     db_service:
-        image: mongo:latest
+        image: saivarma5557/todoapp:mongodb
         container_name: mongo
         ports:
           - "27017:27017"
@@ -10,7 +10,7 @@ services:
           - todo-network
 
     backend_service:
-        image: todobackend:v1
+        image: saivarma5557/todoapp:todobackend
         container_name: backendcont
         ports:
           - "5000:5000"
@@ -24,7 +24,7 @@ services:
           PORT: "5000"
 
     frontend_service:
-        image: todofrontend:v1
+        image: saivarma5557/todoapp:todofrontend
         container_name: frontendcont
         ports:
           - "5173:5173"
