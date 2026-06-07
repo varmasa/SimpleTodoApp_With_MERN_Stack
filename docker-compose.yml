@@ -6,6 +6,8 @@ services:
         container_name: mongo
         ports:
           - "27017:27017"
+        volumes:
+          - mongo_data:/data/db
         networks:
           - todo-network
 
@@ -32,6 +34,8 @@ services:
           - todo-network
         depends_on:
           - backend_service
+volumes:
+  mongo_data:
 networks:
   todo-network:
 ...        
