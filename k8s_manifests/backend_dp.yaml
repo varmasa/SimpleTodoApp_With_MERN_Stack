@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todo_backend
+  template:
+    metadata:
+      labels:
+        app: todo_backend
+    spec:
+      containers:
+      - name: backendtodo
+        image: saivarma5557/todoapp:todobackend
+        ports:
+        - containerPort: 5000

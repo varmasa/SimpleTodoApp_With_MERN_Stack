@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todo_frontend
+  template:
+    metadata:
+      labels:
+        app: todo_frontend
+    spec:
+      containers:
+      - name: frontendtodo
+        image: saivarma5557/todoapp:todofrontend
+        ports:
+        - containerPort: 5173
