@@ -4,6 +4,7 @@ services:
     db_service:
         image: saivarma5557/todoapp:mongodb
         container_name: mongo
+        restart: always
         ports:
           - "27017:27017"
         volumes:
@@ -14,6 +15,7 @@ services:
     backend_service:
         image: saivarma5557/todoapp:todobackend
         container_name: backendcont
+        restart: always
         ports:
           - "5000:5000"
         networks:
@@ -28,14 +30,29 @@ services:
     frontend_service:
         image: saivarma5557/todoapp:todofrontend
         container_name: frontendcont
+        restart: always
         ports:
           - "5173:5173"
         networks:
           - todo-network
         depends_on:
           - backend_service
+
+    portainer:
+        image: portainer/portainer-ce:latest
+        container_name: portainer
+        restart: always
+        ports:
+          - "9443:9443"
+        volumes:
+          - portainer_data:/data
+          - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+          - todo-network
+
 volumes:
   mongo_data:
+  portainer_data:
 networks:
   todo-network:
-...        
+...       
