@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: todons
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: todo_backend
+
+  template:
+    metadata:
+      labels:
+        app: todo_backend
+
+    spec:
+      containers:
+      - name: backendtodo
+        image: saivarma5557/todoapp:todobackendv4
+
+        ports:
+        - containerPort: 5000
+       
+        env:
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_URI
+
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: JWT_SECRET
