@@ -1,13 +1,20 @@
-FROM node:24.16.0
+FROM node:24.16.0 AS build
 
 WORKDIR /app
 
-COPY backend/package*.json .
+COPY frontend/package*.json ./
 
 RUN npm install
 
-COPY backend .
+COPY frontend/ .
 
-EXPOSE 5000
+RUN npm run build
 
-CMD ["node", "server.js", "--", "--host", "0.0.0.0"]
+
+FROM nginx:alpine
+
+COPY --from=build /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx","-g","daemon off;"]
