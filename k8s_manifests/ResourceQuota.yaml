@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ResourceQuota
+
+metadata:
+  name: todons-resourcequota
+  namespace: todons
+
+spec:
+  hard:
+
+    requests.cpu: "2"
+
+    requests.memory: "2Gi"
+
+    limits.cpu: "4"
+
+    limits.memory: "3Gi"
+
+    pods: "20"
