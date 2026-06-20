@@ -1,0 +1,11 @@
+RBAC When we create SA with Role, RB (or) ClusterRole, CRB:
+
+1.kubectl create ns dev
+2.Create SA, Role & RoleBinding
+3.kubectl create token dev-user -n dev
+4.kubectl cluster-info (copy cluster ip)
+5.kubectl config set-credentials dev-user --token=PASTE_TOKEN(step-3)
+6.kubectl config set-cluster minikube-rbac server=<cluster-ip> insecure-skip-tls-verify=true
+7.kubectl config set-context dev-context cluster=minikube-rbac user=dev-user namespace=dev
+8.kubectl config use-context dev-context
+9.kubectl config current-context
