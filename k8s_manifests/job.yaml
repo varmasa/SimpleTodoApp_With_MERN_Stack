@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+
+metadata:
+  name: hello-job
+  namespace: todons
+
+spec:
+  completions: 3
+  parallelism: 2
+  template:
+
+    spec:
+
+      restartPolicy: Never
+
+      containers:
+
+      - name: hello
+
+        image: busybox
+
+        command:
+        - sh
+        - -c
+        - |
+          echo "Starting Job..."
+          sleep 10
+          echo "Job Completed"
