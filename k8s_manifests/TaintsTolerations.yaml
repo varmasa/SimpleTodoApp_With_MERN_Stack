@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: todons
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: todo_backend
+
+  template:
+    metadata:
+      labels:
+        app: todo_backend
+
+    spec:
+    
+      #kubectl taint nodes minikube app=backend:NoSchedule
+
+      tolerations: 
+
+      - key: app
+        operator: Equal
+        value: backend
+        effect: NoSchedule
+
+      containers:
+      - name: backendtodo
+        image: saivarma5557/todoapp:backendv8
+
+        resources:
+
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+
+        ports:
+        - containerPort: 5000
+
+        startupProbe:
+          httpGet:
+            path: /api
+            port: 5000
+
+          failureThreshold: 30
+          periodSeconds: 10
+
+        readinessProbe:
+          httpGet:
+            path: /db
+            port: 5000
+
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+
+        livenessProbe:
+          httpGet:
+            path: /api
+            port: 5000
+
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+
+        env:
+        - name: MONGO_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-config
+              key: MONGO_HOST
+
+        - name: MONGO_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-config
+              key: MONGO_PORT
+
+        - name: MONGO_DBNAME
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-config
+              key: MONGO_DBNAME
+
+        - name: MONGO_USER
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_USER
+
+        - name: MONGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_PASSWORD
+
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: JWT_SECRET
