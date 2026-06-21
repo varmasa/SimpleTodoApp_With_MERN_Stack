@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+
+metadata:
+  name: backend-allow-frontend
+  namespace: todons
+
+spec:
+
+  podSelector:
+    matchLabels:
+      app: todo_backend
+
+  policyTypes:
+  - Ingress
+
+  ingress:
+
+  - from:
+
+    - podSelector:
+        matchLabels:
+          app: todo_frontend
+
+    ports:
+
+    - protocol: TCP
+      port: 5000
